@@ -33,7 +33,6 @@ public class Authorization {
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request) {
         System.out.println("login requested ");
-        loginService.login(request);
-        return "Login Successful";
+        return loginService.login(request);
     }
 }

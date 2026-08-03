@@ -1,18 +1,21 @@
 package com.harsh.propertymanagementsystem.authentication.service;
 
 import com.harsh.propertymanagementsystem.authentication.dto.LoginRequest;
+import com.harsh.propertymanagementsystem.authentication.security.JwtService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service
 public class LoginService {
     private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
-    public Authentication login(LoginRequest request) {
+    public String login(LoginRequest request) {
         Authentication authentication =
                 authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(
@@ -20,6 +23,10 @@ public class LoginService {
                                 request.getPassword()
                         )
                 );
-        return authentication;
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String token = jwtService.generateToken(userDetails);
+
+
+        return token;
     }
 }
