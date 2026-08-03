@@ -35,4 +35,9 @@ public class Authorization {
         System.out.println("login requested ");
         return loginService.login(request);
     }
+
+    @PostMapping("/protected")
+    public String protectedd() {
+        return "ok";
+    }
 }
