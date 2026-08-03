@@ -1,0 +1,10 @@
+package com.harsh.propertymanagementsystem.authentication.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class RegisterResponce {
+    String msg;
+}
