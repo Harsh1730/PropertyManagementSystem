@@ -9,6 +9,7 @@ import com.harsh.propertymanagementsystem.authentication.exception.PhoneAlreadyE
 import com.harsh.propertymanagementsystem.authentication.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository repo;
+    private final PasswordEncoder encoder;
 
     public User findByEmail(String email) {
         return repo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("No User Found With This Email"));
@@ -40,7 +42,7 @@ public class UserService {
                 .phoneNumber(request.getPhoneNumber())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
-                .password(request.getPassword())
+                .password(encoder.encode(request.getPassword()))
                 .role(Role.TENANT)
                 .accountLocked(false)
                 .enabled(true)
