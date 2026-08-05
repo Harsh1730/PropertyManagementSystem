@@ -1,4 +1,4 @@
-package com.harsh.propertymanagementsystem.authentication.dto;
+package com.harsh.propertymanagementsystem.auth.dto;
 
 import lombok.Data;
 

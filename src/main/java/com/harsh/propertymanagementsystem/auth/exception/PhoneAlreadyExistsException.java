@@ -1,4 +1,4 @@
-package com.harsh.propertymanagementsystem.authentication.exception;
+package com.harsh.propertymanagementsystem.auth.exception;
 
 public class PhoneAlreadyExistsException extends Exception {
     public PhoneAlreadyExistsException() {

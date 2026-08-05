@@ -1,12 +1,12 @@
-package com.harsh.propertymanagementsystem.authentication.service;
+package com.harsh.propertymanagementsystem.auth.service;
 
-import com.harsh.propertymanagementsystem.authentication.dto.RegisterRequest;
-import com.harsh.propertymanagementsystem.authentication.dto.RegisterResponce;
-import com.harsh.propertymanagementsystem.authentication.entity.Role;
-import com.harsh.propertymanagementsystem.authentication.entity.User;
-import com.harsh.propertymanagementsystem.authentication.exception.EmailAlreadyExistsException;
-import com.harsh.propertymanagementsystem.authentication.exception.PhoneAlreadyExistsException;
-import com.harsh.propertymanagementsystem.authentication.repository.UserRepository;
+import com.harsh.propertymanagementsystem.auth.dto.RegisterRequest;
+import com.harsh.propertymanagementsystem.auth.dto.RegisterResponce;
+import com.harsh.propertymanagementsystem.auth.entity.Role;
+import com.harsh.propertymanagementsystem.auth.entity.User;
+import com.harsh.propertymanagementsystem.auth.exception.EmailAlreadyExistsException;
+import com.harsh.propertymanagementsystem.auth.exception.PhoneAlreadyExistsException;
+import com.harsh.propertymanagementsystem.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;

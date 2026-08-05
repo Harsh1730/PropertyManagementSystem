@@ -1,6 +1,6 @@
-package com.harsh.propertymanagementsystem.authentication.repository;
+package com.harsh.propertymanagementsystem.auth.repository;
 
-import com.harsh.propertymanagementsystem.authentication.entity.User;
+import com.harsh.propertymanagementsystem.auth.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

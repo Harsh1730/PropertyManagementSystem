@@ -1,6 +1,4 @@
-package com.harsh.propertymanagementsystem.authentication.exception;
-
-import jakarta.validation.constraints.Email;
+package com.harsh.propertymanagementsystem.auth.exception;
 
 public class EmailAlreadyExistsException extends Exception {
     public EmailAlreadyExistsException(){

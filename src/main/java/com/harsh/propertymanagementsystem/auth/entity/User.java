@@ -1,4 +1,4 @@
-package com.harsh.propertymanagementsystem.authentication.entity;
+package com.harsh.propertymanagementsystem.auth.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
