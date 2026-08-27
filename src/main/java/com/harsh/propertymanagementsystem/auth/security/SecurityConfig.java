@@ -81,7 +81,7 @@ public class SecurityConfig {
 
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
-                "https://propertymanagementsystem-production.up.railway.app"
+                "https://property-management-system-front-en-omega.vercel.app"
         ));
 
         configuration.setAllowedMethods(
