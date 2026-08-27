@@ -49,6 +49,13 @@ public class PropertyController {
         return ResponseEntity.ok(Map.of("message", "Image deleted successfully"));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> deleteProperty(@PathVariable Long id) {
+        log.info("Received request to delete property #{}", id);
+        propertyService.deleteProperty(id);
+        return ResponseEntity.ok(Map.of("message", "Property deleted successfully"));
+    }
+
     @GetMapping("/images/{imageId}")
     public ResponseEntity<byte[]> getPropertyImage(@PathVariable Long imageId) {
         log.info("Received request to view property image: {}", imageId);
