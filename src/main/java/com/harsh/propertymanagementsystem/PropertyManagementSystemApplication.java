@@ -9,5 +9,4 @@ public class PropertyManagementSystemApplication {
     public static void main(String[] args) {
         SpringApplication.run(PropertyManagementSystemApplication.class, args);
     }
-
 }
