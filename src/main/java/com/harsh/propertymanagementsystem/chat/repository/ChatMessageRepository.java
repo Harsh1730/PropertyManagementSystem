@@ -23,6 +23,8 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
 
     List<ChatMessage> findByBookingIdOrderByTimestampAsc(Long bookingId);
 
+    List<ChatMessage> findByPropertyId(Long propertyId);
+
     @Query("SELECT m FROM ChatMessage m " +
            "WHERE m.sender.id = :userId OR m.receiver.id = :userId " +
            "ORDER BY m.timestamp DESC")

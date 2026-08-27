@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 import java.util.Map;
 
@@ -29,19 +28,16 @@ public class PropertyController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<PropertyResponse> createProperty(
-            @Valid @ModelAttribute CreatePropertyRequest request
-    ) {
+            @Valid @ModelAttribute CreatePropertyRequest request) {
         log.info("Received multipart request to create property: {}", request.getPropertyName());
         return ResponseEntity.ok(
-                propertyService.createProperty(request)
-        );
+                propertyService.createProperty(request));
     }
 
     @PostMapping(value = "/{id}/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<PropertyResponse> addImagesToProperty(
             @PathVariable Long id,
-            @RequestParam("images") List<MultipartFile> images
-    ) {
+            @RequestParam("images") List<MultipartFile> images) {
         log.info("Received request to add {} images to property #{}", images != null ? images.size() : 0, id);
         return ResponseEntity.ok(propertyService.addImagesToProperty(id, images));
     }
@@ -61,12 +57,15 @@ public class PropertyController {
         if (image.getContentType() != null) {
             try {
                 mediaType = MediaType.parseMediaType(image.getContentType());
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
 
         return ResponseEntity.ok()
                 .contentType(mediaType)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + (image.getFileName() != null ? image.getFileName() : "image.jpg") + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=\"" + (image.getFileName() != null ? image.getFileName() : "image.jpg")
+                                + "\"")
                 .body(image.getImageData());
     }
 

@@ -44,4 +44,11 @@ public class Authorization {
     public ResponseEntity<Map<String, String>> protectedEndpoint() {
         return ResponseEntity.ok(Map.of("message", "ok"));
     }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<Map<String, String>> deleteAccount() {
+        log.info("Received request to delete current user account");
+        userService.deleteCurrentUserAccount();
+        return ResponseEntity.ok(Map.of("message", "User account deleted successfully"));
+    }
 }

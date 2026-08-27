@@ -3,6 +3,15 @@ package com.harsh.propertymanagementsystem.property.service;
 import com.harsh.propertymanagementsystem.auth.entity.User;
 import com.harsh.propertymanagementsystem.auth.repository.UserRepository;
 import com.harsh.propertymanagementsystem.common.exception.ResourceNotFoundException;
+import com.harsh.propertymanagementsystem.booking.entity.BookingRequest;
+import com.harsh.propertymanagementsystem.booking.repository.BookingRequestRepository;
+import com.harsh.propertymanagementsystem.chat.entity.ChatMessage;
+import com.harsh.propertymanagementsystem.chat.repository.ChatMessageRepository;
+import com.harsh.propertymanagementsystem.lease.entity.Lease;
+import com.harsh.propertymanagementsystem.lease.entity.LeaseStatus;
+import com.harsh.propertymanagementsystem.lease.repository.LeaseRepository;
+import com.harsh.propertymanagementsystem.maintenance.repository.MaintenanceRepository;
+import com.harsh.propertymanagementsystem.payment.repository.PaymentRepository;
 import com.harsh.propertymanagementsystem.property.dto.CreatePropertyRequest;
 import com.harsh.propertymanagementsystem.property.dto.PropertyResponse;
 import com.harsh.propertymanagementsystem.property.entity.Property;
@@ -38,6 +47,11 @@ public class PropertyService {
     private final PropertyImageRepository propertyImageRepository;
     private final PropertyReviewRepository propertyReviewRepository;
     private final OwnerReviewRepository ownerReviewRepository;
+    private final LeaseRepository leaseRepository;
+    private final PaymentRepository paymentRepository;
+    private final MaintenanceRepository maintenanceRepository;
+    private final BookingRequestRepository bookingRequestRepository;
+    private final ChatMessageRepository chatMessageRepository;
     private final PropertyMapper propertyMapper;
     private final UserRepository userRepository;
 
@@ -137,6 +151,62 @@ public class PropertyService {
 
         propertyImageRepository.delete(image);
         log.info("Deleted property image #{} by owner {}", imageId, owner.getEmail());
+    }
+
+    @Transactional
+    public void deleteProperty(Long id) {
+        User owner = getCurrentUser();
+        Property property = propertyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Property not found with ID: " + id));
+
+        if (!property.getOwner().getId().equals(owner.getId())) {
+            throw new AccessDeniedException("You are not authorized to delete this property");
+        }
+
+        // Check if property has active leases
+        boolean hasActiveLease = leaseRepository.findByPropertyId(id).stream()
+                .anyMatch(l -> l.getStatus() == LeaseStatus.ACTIVE);
+        if (hasActiveLease) {
+            throw new IllegalStateException("Cannot delete property with active leases. Please terminate active leases first.");
+        }
+
+        // 1. Unlink chat messages referring to this property
+        List<ChatMessage> chatMessages = chatMessageRepository.findByPropertyId(id);
+        for (ChatMessage msg : chatMessages) {
+            msg.setProperty(null);
+            msg.setBooking(null);
+            chatMessageRepository.save(msg);
+        }
+
+        // 2. Delete booking requests for this property
+        List<BookingRequest> bookings = bookingRequestRepository.findByPropertyIdOrderByCreatedAtDesc(id);
+        for (BookingRequest booking : bookings) {
+            List<ChatMessage> bookingMessages = chatMessageRepository.findByBookingIdOrderByTimestampAsc(booking.getId());
+            for (ChatMessage bMsg : bookingMessages) {
+                bMsg.setBooking(null);
+                chatMessageRepository.save(bMsg);
+            }
+            bookingRequestRepository.delete(booking);
+        }
+
+        // 3. Delete property reviews
+        propertyReviewRepository.findByPropertyIdOrderByCreatedAtDesc(id)
+                .forEach(propertyReviewRepository::delete);
+
+        // 4. Delete maintenance requests
+        maintenanceRepository.findByPropertyId(id)
+                .forEach(maintenanceRepository::delete);
+
+        // 5. Delete non-active leases and their payments
+        List<Lease> leases = leaseRepository.findByPropertyId(id);
+        for (Lease lease : leases) {
+            paymentRepository.findByLeaseId(lease.getId()).forEach(paymentRepository::delete);
+            leaseRepository.delete(lease);
+        }
+
+        // 6. Delete property (images cascade automatically)
+        propertyRepository.delete(property);
+        log.info("Deleted property #{} ('{}') by owner {}", id, property.getPropertyName(), owner.getEmail());
     }
 
     @Transactional(readOnly = true)
