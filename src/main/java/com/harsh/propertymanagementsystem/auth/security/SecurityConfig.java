@@ -79,11 +79,12 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "https://property-management-system-front-en-omega.vercel.app",
-                "https://property-management-system-front-hku73k5vo-harsh1730-6982.vercel.app",
-                "https://property-management-system-front-end-git-main-harsh1730-6982.vercel.app"
+        configuration.setAllowedOriginPatterns(List.of(
+                "http://localhost:*",
+                "https://*.vercel.app",
+                "https://*.railway.app",
+                "https://*.up.railway.app",
+                "*"
         ));
 
         configuration.setAllowedMethods(
