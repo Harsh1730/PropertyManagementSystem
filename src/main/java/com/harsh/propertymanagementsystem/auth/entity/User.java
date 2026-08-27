@@ -52,11 +52,13 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    @Builder.Default
     @Column(nullable = false)
-    private boolean enabled;
+    private boolean enabled = true;
 
+    @Builder.Default
     @Column(nullable = false)
-    private boolean accountLocked;
+    private boolean accountLocked = false;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -65,4 +67,8 @@ public class User {
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    public String getName() {
+        return this.getFirstName() + " " + this.getLastName();
+    }
 }

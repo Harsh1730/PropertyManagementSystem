@@ -1,5 +1,6 @@
 package com.harsh.propertymanagementsystem.auth.security;
 
+import com.harsh.propertymanagementsystem.auth.entity.Role;
 import com.harsh.propertymanagementsystem.auth.entity.User;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +15,18 @@ public class CustomUserDetails implements UserDetails {
 
     public CustomUserDetails(User user) {
         this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Long getId() {
+        return user.getId();
+    }
+
+    public Role getRole() {
+        return user.getRole();
     }
 
     @Override
@@ -52,6 +65,4 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return user.isEnabled();
     }
-
 }
-

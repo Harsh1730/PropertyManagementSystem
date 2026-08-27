@@ -1,12 +1,16 @@
 package com.harsh.propertymanagementsystem.property.entity;
+
 import com.harsh.propertymanagementsystem.auth.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "properties")
@@ -82,4 +86,13 @@ public class Property {
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @Builder.Default
+    @OneToMany(
+            mappedBy = "property",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<PropertyImage> images = new ArrayList<>();
+
 }

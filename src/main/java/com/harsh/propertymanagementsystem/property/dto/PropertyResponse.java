@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -25,5 +26,13 @@ public class PropertyResponse {
     private BigDecimal rentAmount;
     private BigDecimal securityDeposit;
     private Integer totalUnits;
+    private Long ownerId;
+    private String ownerName;
+    private Double ownerRating;
+    private Double averageRating;
+    private Integer totalReviews;
+    private List<String> imageUrls;
     private LocalDateTime createdAt;
 }
+
+
