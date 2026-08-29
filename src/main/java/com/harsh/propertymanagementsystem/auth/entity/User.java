@@ -42,7 +42,7 @@ public class User {
     @Email
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true)
     private String phoneNumber;
 
     @Column(nullable = false)
@@ -51,6 +51,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private String authProvider = "LOCAL";
 
     @Builder.Default
     @Column(nullable = false)

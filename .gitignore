@@ -35,5 +35,5 @@ build/
 target/
 .idea/
 *.iml
-.env
+src/main/resources/.env
 application-local.properties

@@ -6,6 +6,8 @@ import com.harsh.propertymanagementsystem.auth.dto.RegisterRequest;
 import com.harsh.propertymanagementsystem.auth.dto.RegisterResponce;
 import com.harsh.propertymanagementsystem.auth.exception.EmailAlreadyExistsException;
 import com.harsh.propertymanagementsystem.auth.exception.PhoneAlreadyExistsException;
+import com.harsh.propertymanagementsystem.auth.dto.OAuthGoogleRequest;
+import com.harsh.propertymanagementsystem.auth.service.GoogleOAuthService;
 import com.harsh.propertymanagementsystem.auth.service.LoginService;
 import com.harsh.propertymanagementsystem.auth.service.UserService;
 import jakarta.validation.Valid;
@@ -24,6 +26,7 @@ public class Authorization {
 
     private final UserService userService;
     private final LoginService loginService;
+    private final GoogleOAuthService googleOAuthService;
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponce> register(
@@ -40,6 +43,13 @@ public class Authorization {
         return ResponseEntity.ok(loginService.login(request));
     }
 
+    @PostMapping("/oauth/google")
+    public ResponseEntity<LoginResponce> loginWithGoogle(
+            @RequestBody @Valid OAuthGoogleRequest request) {
+        log.info("Received Google OAuth login request");
+        return ResponseEntity.ok(googleOAuthService.authenticateWithGoogle(request));
+    }
+
     @PostMapping("/protected")
     public ResponseEntity<Map<String, String>> protectedEndpoint() {
         return ResponseEntity.ok(Map.of("message", "ok"));
@@ -52,3 +62,4 @@ public class Authorization {
         return ResponseEntity.ok(Map.of("message", "User account deleted successfully"));
     }
 }
+
